@@ -1,0 +1,43 @@
+class Binary {
+  function Array toBinary(int number) {
+    var Array result;
+    var int i, temp, divided;
+    var boolean isNegative;
+    let result = Array.new(16);
+    let isNegative = false;
+    let i = 0;
+    if (number < 0) {
+      let isNegative = true;
+      let number = -(number + 1);
+    }
+    let divided = Math.divide(number, 2);
+    while (number > 0) {
+      let temp = Math.multiply(divided, 2);
+      let temp = number - temp;
+      if (isNegative) {
+        if (temp = 0) {
+          let result[i] = 1;
+        } else {
+          let result[i] = 0;
+        }
+      } else {
+        let result[i] = temp;
+      }
+      let number = divided;
+      let divided = Math.divide(number, 2);
+      let i = i + 1;
+    }
+    if (isNegative) {
+      while (i < 16) {
+        let result[i] = 1;
+        let i = i + 1;
+      }
+    } else {
+      while (i < 16) {
+        let result[i] = 0;
+        let i = i + 1;
+      }
+    }
+    return result;
+  }
+}

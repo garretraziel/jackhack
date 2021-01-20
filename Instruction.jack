@@ -1,0 +1,97 @@
+class Instruction {
+  field boolean isA, usemem, writeM, writeD, writeA;
+  field Array opcodes, jump;
+  field in numA;
+
+  constructor Instruction new(int instrCode) {
+    var Array decoded;
+    let decoded = Binary.toBinary(instrCode);
+    let opcodes = Array.new(6);
+    let jump = Array.new(3);
+    if (decoded[15] = 1) {
+      let isA = false;
+      if (decoded[12] = 1) {
+        let usemem = true;
+      } else {
+        let usemem = false;
+      }
+      if (decoded[3] = 1) {
+        let writeM = true;
+      } else {
+        let writeM = false;
+      }
+      if (decoded[4] = 1) {
+        let writeD = true;
+      } else {
+        let writeD = false;
+      }
+      if (decoded[5] = 1) {
+        let writeA = true;
+      } else {
+        let writeA = false;
+      }
+      let opcodes[0] = decoded[6];
+      let opcodes[1] = decoded[7];
+      let opcodes[2] = decoded[8];
+      let opcodes[3] = decoded[9];
+      let opcodes[4] = decoded[10];
+      let opcodes[5] = decoded[11];
+      let jump[0] = decoded[0];
+      let jump[1] = decoded[1];
+      let jump[2] = decoded[2];
+    } else {
+      let isA = true;
+      let numA = instrCode;
+    }
+    do decoded.dispose();
+    return this;
+  }
+
+  method boolean shouldJump(int aluResult) {
+    if ((jump[0] = 1) & (aluResult > 0)) {
+      return true;
+    }
+    if ((jump[1] = 1) & (aluResult = 0)) {
+      return true;
+    }
+    if ((jump[2] = 1) & (aluResult < 0)) {
+      return true;
+    }
+    return false;
+  }
+
+  method boolean isa() {
+    return isA;
+  }
+
+  method int numa() {
+    return numA;
+  }
+
+  method boolean usem() {
+    return usemem;
+  }
+
+  method boolean writem() {
+    return writeM;
+  }
+
+  method boolean writed() {
+    return writeD;
+  }
+
+  method boolean writea() {
+    return writeA;
+  }
+
+  method Array opcode() {
+    return opcodes;
+  }
+
+  method void dispose() {
+    do opcodes.dispose();
+    do jump.dispose();
+    do Memory.deAlloc(this);
+    return;
+  }
+}

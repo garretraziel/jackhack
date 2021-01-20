@@ -1,0 +1,29 @@
+class ALU {
+  function int doOperation(Array opcodes, int x, int y) {
+    var int result;
+    let result = 0;
+
+    if (opcodes[5] = 1) {
+      let x = 0;
+    }
+    if (opcodes[4] = 1) {
+      let x = ~x;
+    }
+    if (opcodes[3] = 1) {
+      let y = 0;
+    }
+    if (opcodes[2] = 1) {
+      let y = ~y;
+    }
+    if (opcodes[1] = 1) {
+      let result = x + y;
+    } else {
+      let result = x & y;
+    }
+    if (opcodes[0] = 1) {
+      let result = ~result;
+    }
+
+    return result;
+  }
+}

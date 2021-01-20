@@ -1,0 +1,71 @@
+class Main {
+  function void main() {
+    var Array ram;
+    var Array rom;
+    var int areg, dreg;
+    var int pc, iterations;
+    var int instrCode;
+    var int aluresult;
+    var Instruction instruction;
+    let ram = Array.new(256);
+    let rom = Array.new(256);
+    let pc = 0;
+    let iterations = 0;
+    let areg = 0;
+    let dreg = 0;
+
+    let rom[0] = 2;
+    let rom[1] = -5496;
+    let rom[2] = 1;
+    let rom[3] = -1008;
+    let rom[4] = 14;
+    let rom[5] = -7418;
+    let rom[6] = 1;
+    let rom[7] = -7288;
+    let rom[8] = 0;
+    let rom[9] = -1008;
+    let rom[10] = 2;
+    let rom[11] = -3960;
+    let rom[12] = 2;
+    let rom[13] = -5497;
+    let rom[14] = 14;
+    let rom[15] = -5497;
+
+    let ram[0] = 3;
+    let ram[1] = 5;
+
+    while (iterations < 300) {
+      let instrCode = rom[pc];
+      let instruction = Instruction.new(instrCode);
+      if (instruction.isa()) {
+        let areg = instruction.numa();
+        let pc = pc + 1;
+      } else {
+        if (instruction.usem()) {
+          let aluresult = ALU.doOperation(instruction.opcode(), dreg, ram[areg]);
+        } else {
+          let aluresult = ALU.doOperation(instruction.opcode(), dreg, areg);
+        }
+        if (instruction.writem()) {
+          let ram[areg] = aluresult;
+        }
+        if (instruction.writed()) {
+          let dreg = aluresult;
+        }
+        if (instruction.writea()) {
+          let areg = aluresult;
+        }
+        if (instruction.shouldJump(aluresult)) {
+          let pc = areg;
+        } else {
+          let pc = pc + 1;
+        }
+      }
+      do instruction.dispose();
+      let iterations = iterations + 1;
+    }
+
+    do Output.printInt(ram[2]);
+    return;
+  }
+}
